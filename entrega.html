@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu Kit chegou! — Figurinhas Copa 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;800&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#F5C518;--green:#009B3A;--green2:#00C04B;--bg:#05080D;--bg2:#0C1219;--bg3:#111922;--white:#fff;--gray:#8A9BB0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min-height:100vh}
+.top{background:linear-gradient(135deg,var(--green),var(--green2));padding:14px 20px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+.page{max-width:640px;margin:0 auto;padding:48px 20px 80px}
+.confirm{display:flex;align-items:center;gap:16px;background:rgba(0,155,58,.1);border:1px solid rgba(0,155,58,.3);border-radius:16px;padding:20px 24px;margin-bottom:40px}
+.confirm-icon{width:52px;height:52px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.confirm-text strong{display:block;font-size:17px;margin-bottom:3px}
+.confirm-text p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.4}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,6vw,48px);margin-bottom:6px}
+.section-sub{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:28px;line-height:1.5}
+.item-card{background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--white);transition:border-color .2s,transform .15s}
+.item-card:hover{border-color:rgba(245,197,24,.35);transform:translateX(4px)}
+.item-icon{width:52px;height:52px;border-radius:12px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.2);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.item-info{flex:1}
+.item-name{font-weight:700;font-size:16px;margin-bottom:3px}
+.item-desc{font-size:13px;color:rgba(255,255,255,.5)}
+.item-arrow{color:var(--gold);font-size:22px;flex-shrink:0}
+.divider{border:none;border-top:1px solid rgba(255,255,255,.07);margin:32px 0}
+.support-box{background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;text-align:center}
+.support-box h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:.04em;margin-bottom:8px}
+.support-box p{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.6}
+.btn-wpp{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:14px 32px;border-radius:50px;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 24px rgba(37,211,102,.3)}
+.btn-wpp:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(37,211,102,.4)}
+.email-note{text-align:center;margin-top:24px;font-size:13px;color:rgba(255,255,255,.35)}
+.email-note strong{color:rgba(255,255,255,.6)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px}
+@media(max-width:500px){.steps{grid-template-columns:1fr}}
+.step{background:var(--bg3);border-radius:14px;padding:18px 16px;text-align:center}
+.step-num{width:32px;height:32px;background:var(--gold);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;margin:0 auto 10px}
+.step-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.4}
+.step-text strong{color:var(--white);display:block;margin-bottom:3px}
+</style>
+</head>
+<body>
+<div class="top">✅ Pagamento confirmado — Seus materiais estão prontos!</div>
+
+<div class="page">
+  <div class="confirm">
+    <div class="confirm-icon">✅</div>
+    <div class="confirm-text">
+      <strong id="nome-confirm">Tudo certo!</strong>
+      <p>Pagamento confirmado. Acesse seus materiais abaixo e verifique seu e-mail — enviamos os links também!</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Clique no material</strong>Acesse o link do Google Drive</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Baixe os arquivos</strong>Salve os PDFs no celular ou PC</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Imprima e cole</strong>Siga o guia de impressão incluso</div></div>
+  </div>
+
+  <div class="section-title">Seus materiais</div>
+  <p class="section-sub">Clique em cada item para acessar o Google Drive</p>
+
+  <div id="links-container"></div>
+
+  <hr class="divider">
+
+  <div class="support-box">
+    <h3>Precisa de ajuda?</h3>
+    <p>Se os links não abrirem ou você tiver alguma dúvida sobre impressão, fale com nosso suporte. Respondemos rapidinho! 😊</p>
+    <a href="https://wa.me/5511967843773?text=Olá!%20Comprei%20o%20Kit%20Figurinhas%20Copa%202026%20e%20preciso%20de%20ajuda." class="btn-wpp">
+      💬 Falar com Suporte
+    </a>
+    <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.35)">(11) 96784-3773 · WhatsApp</p>
+  </div>
+
+  <p class="email-note" id="email-note">Também enviamos os links para o seu e-mail.</p>
+</div>
+
+<script>
+const LINKS = {
+  principal: {
+    nome: 'Kit Completo Premium Copa 2026',
+    desc: '+980 figurinhas, legends, holográficas, kids e bônus FIFA',
+    icon: '🏆',
+    url: 'https://drive.google.com/drive/folders/1IvOwUSFoD3OkpHVTcr7iuTPgx8XrCb6j?usp=drive_link'
+  },
+  neymar: {
+    nome: 'Figurinha Premium Neymar Edição Especial',
+    desc: 'Pack exclusivo Neymar JR em alta qualidade',
+    icon: '⭐',
+    url: 'https://drive.google.com/drive/folders/1t6egX7m-6bP3I08-5mlHOqVkBhp31HG4?usp=drive_link'
+  },
+  gold: {
+    nome: 'Figurinhas Sticker Gold Raras 2026',
+    desc: 'Neymar, Messi, CR7, Mbappé, Haaland e Salah em versão Gold',
+    icon: '🥇',
+    url: 'https://drive.google.com/drive/folders/1At2FF0b8fMaJerjN9iKFGO-rhJotSHbl?usp=drive_link'
+  },
+  cartela: {
+    nome: 'Cartelas de Corte — Impressão Alinhada',
+    desc: 'Guias de corte para impressão perfeita e sem desperdício',
+    icon: '✂️',
+    url: 'https://drive.google.com/drive/folders/1MAd00A-mElCaN_Wj35C41HL5a0YyS6T7?usp=drive_link'
+  }
+};
+
+function init() {
+  // Ler dados da URL
+  const params = new URLSearchParams(window.location.search);
+  const nome = params.get('nome') || '';
+  const email = params.get('email') || '';
+  const itensParam = params.get('itens') || 'principal';
+  const itens = itensParam.split(',');
+
+  // Atualizar nome
+  if (nome) {
+    document.getElementById('nome-confirm').textContent = `Tudo certo, ${nome}!`;
+  }
+
+  // Email note
+  if (email) {
+    document.getElementById('email-note').innerHTML = 
+      `📧 Também enviamos os links para <strong>${email}</strong>`;
+  }
+
+  // Montar cards de links
+  const container = document.getElementById('links-container');
+  itens.forEach(key => {
+    const item = LINKS[key];
+    if (!item) return;
+    container.innerHTML += `
+      <a href="${item.url}" target="_blank" class="item-card">
+        <div class="item-icon">${item.icon}</div>
+        <div class="item-info">
+          <div class="item-name">${item.nome}</div>
+          <div class="item-desc">${item.desc}</div>
+        </div>
+        <div class="item-arrow">→</div>
+      </a>`;
+  });
+
+  // Enviar email
+  if (email && itens.length) {
+    const itensEmail = itens.map(key => ({ key, nome: LINKS[key]?.nome || key }));
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ nome, email, itens: itensEmail })
+    }).catch(() => {});
+  }
+}
+
+init();
+</script>
+</body>
+</html>
