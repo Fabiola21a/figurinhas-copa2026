@@ -12,7 +12,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--white);font-family:"Barlow",sans-serif;overflow-x:hidden}
 
-.urgency{background:linear-gradient(90deg,#9b001e,var(--red),#9b001e);padding:11px 20px;text-align:center;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;position:sticky;top:0;z-index:200}
+.urgency{background:linear-gradient(90deg,#9b001e,var(--red),#9b001e);padding:11px 20px;text-align:center;font-family:"Barlow",sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;text-transform:none;position:sticky;top:0;z-index:200}
 .urgency em{color:var(--gold);font-style:normal}
 .udot{display:inline-block;width:7px;height:7px;background:var(--gold);border-radius:50%;margin:0 8px;vertical-align:middle;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
@@ -119,11 +119,11 @@ h1{font-family:"Bebas Neue",sans-serif;font-size:clamp(56px,10vw,118px);line-hei
 .checkout-section{background:var(--bg3);padding:60px 20px;border-top:1px solid var(--border)}
 .checkout-inner{max-width:680px;margin:0 auto}
 
-.flow-steps{display:flex;align-items:center;gap:0;margin-bottom:36px;justify-content:center}
-.flow-step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:rgba(255,255,255,.3)}
+.flow-steps{display:flex;align-items:center;gap:0;margin-bottom:36px;justify-content:center;padding:0 8px}
+.flow-step{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:rgba(255,255,255,.3)}
 .flow-step.active{color:var(--white)}
 .flow-step.done{color:var(--green2)}
-.flow-num{width:28px;height:28px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.flow-num{width:32px;height:32px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
 .flow-line{width:32px;height:2px;background:rgba(255,255,255,.1);margin:0 4px}
 .flow-step.done .flow-line{background:var(--green2)}
 
@@ -141,7 +141,7 @@ h1{font-family:"Bebas Neue",sans-serif;font-size:clamp(56px,10vw,118px);line-hei
 /* STEP 2 - BUMPS */
 .bump-card{background:var(--bg2);border:2px solid rgba(255,255,255,.07);border-radius:16px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
 .bump-card.selected{border-color:var(--gold);background:rgba(245,197,24,.04)}
-.bump-inner{padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.bump-inner{padding:18px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
 .bump-check{width:24px;height:24px;border:2px solid rgba(255,255,255,.25);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;background:transparent}
 .bump-card.selected .bump-check{background:var(--gold);border-color:var(--gold)}
 .bump-check-icon{display:none;font-size:14px;color:#000}
@@ -192,7 +192,7 @@ svg.ck{display:inline-block;color:var(--green2)}
 </head>
 <body>
 
-<div class="urgency"><span class="udot"></span>⚡ Oferta Copa 2026 — válida apenas <em>hoje, <span id="dtop"></span></em><span class="udot"></span></div>
+<div class="urgency"><span class="udot"></span> ⚡ Oferta especial válida somente hoje · <em><span id="dtop"></span></em> <span class="udot"></span></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -220,7 +220,7 @@ svg.ck{display:inline-block;color:var(--green2)}
     </div>
     <span><strong>+2.458 famílias</strong> já completaram o álbum</span>
   </div>
-  <a href="#checkout" class="btn-g">🏆 Quero meu Kit por R$&nbsp;19,90</a>
+  <a href="#checkout" class="btn-g">⚽ Garantir meu Kit por R$&nbsp;19,90</a>
   <p class="btn-sub">🔒 Pagamento seguro via Pix · 30 dias de garantia</p>
 </section>
 
@@ -330,7 +330,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="brow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2.5" width="14" height="14" style="flex-shrink:0;margin-top:2px"><path d="M20 6L9 17l-5-5"/></svg><p><strong>OFICIAL FIFA:</strong> Guia de Impressão Premium</p></div>
     </div>
     <div class="dnote"><span class="di">📥</span><div><strong>Acesso imediato por download</strong>Após o pagamento você acessa os arquivos direto pelo site e também recebe no seu e-mail.</div></div>
-    <button class="btn-g" onclick="irParaCheckout()">✅ Garantir meu Kit por R$&nbsp;19,90</button>
+    <button class="btn-g" onclick="irParaCheckout()">⚽ Quero completar meu álbum por R$&nbsp;19,90</button>
     <div class="tbar"><span>🛡️ 30 dias de garantia</span><span>🔒 Pix seguro</span><span>⚡ Acesso imediato</span></div>
   </div>
 </section>
@@ -350,8 +350,8 @@ svg.ck{display:inline-block;color:var(--green2)}
 
     <!-- STEP 1: DADOS -->
     <div class="step-panel active" id="step-1">
-      <h3 class="step-title">Para onde enviamos seu kit?</h3>
-      <p class="step-sub">Preencha seus dados para receber os links por e-mail.</p>
+      <h3 class="step-title">Quase lá! Para onde enviamos?</h3>
+      <p class="step-sub">Seus links de acesso serão enviados para o e-mail informado logo após o pagamento.</p>
       <div class="form-group">
         <label class="form-label">Seu nome</label>
         <input class="form-input" type="text" id="campo-nome" placeholder="Digite seu nome" autocomplete="given-name">
@@ -361,7 +361,7 @@ svg.ck{display:inline-block;color:var(--green2)}
         <input class="form-input" type="email" id="campo-email" placeholder="seu@email.com" autocomplete="email">
       </div>
       <div class="form-group">
-        <label class="form-label">Seu WhatsApp</label>
+        <label class="form-label">WhatsApp (para suporte)</label>
         <input class="form-input" type="tel" id="campo-telefone" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="numeric">
       </div>
       <button class="btn-g" style="margin-top:8px" onclick="irStep2()">Continuar →</button>
@@ -369,8 +369,8 @@ svg.ck{display:inline-block;color:var(--green2)}
 
     <!-- STEP 2: BUMPS -->
     <div class="step-panel" id="step-2">
-      <h3 class="step-title">Quer levar algo a mais?</h3>
-      <p class="step-sub">Adicione ao seu pedido com desconto exclusivo — só agora.</p>
+      <h3 class="step-title">Última chance de economizar!</h3>
+      <p class="step-sub">Adicione ao seu kit com desconto de até 78% — oferta válida só neste momento.</p>
 
       <div class="bump-card" id="bump-0">
         <div class="bump-inner" onclick="toggleBump(0)">
@@ -427,14 +427,14 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="slabel">Dúvidas frequentes</div>
       <h2 class="stitle">Ficou com dúvida?</h2>
     </div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Como recebo o material após o pagamento?</div><div class="faq-a">Assim que o Pix for confirmado, você será redirecionado para uma página com todos os seus links de download. Também enviaremos os links para o seu e-mail cadastrado.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Como recebo após o pagamento?</div><div class="faq-a">Você é redirecionado automaticamente para a página de entrega com todos os links do Google Drive. Os links também são enviados para o seu e-mail cadastrado em até 5 minutos.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Preciso ter impressora em casa?</div><div class="faq-a">Não. Você pode imprimir em qualquer gráfica, papelaria ou loja de conveniência. O guia de impressão incluído no kit explica exatamente como fazer.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">As figurinhas ficam no tamanho certo para o álbum?</div><div class="faq-a">Sim! Os arquivos já estão formatados no tamanho padrão Panini. Basta imprimir em A4 e recortar pelas linhas guia.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">E se eu não receber os links?</div><div class="faq-a">Verifique sua caixa de spam primeiro. Se não encontrar, entre em contato pelo WhatsApp: (11) 96784-3773 e te enviamos na hora.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Não recebi os links, e agora?</div><div class="faq-a">Verifique a caixa de spam do seu e-mail. Se não encontrar, manda mensagem no WhatsApp <strong style="color:#fff">(11) 96784-3773</strong> com seu nome e te enviamos na hora — respondemos em minutos.</div></div>
   </div>
 </section>
 
-<footer><p>© 2026 Kit Figurinhas Copa 2026 · Produto digital · Suporte: (11) 96784-3773<br>Dúvidas? <a href="https://wa.me/5511967843773" style="color:var(--gold)">Fale pelo WhatsApp</a></p></footer>
+<footer><p>© 2026 Kit Figurinhas Copa 2026 · Produto digital · Entrega via Google Drive<br>Suporte: <a href="https://wa.me/5511967843773" style="color:var(--gold)">(11) 96784-3773</a> · Respondemos em minutos</p></footer>
 
 <script>
 const BASE = 1990;
