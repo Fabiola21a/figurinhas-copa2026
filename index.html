@@ -360,6 +360,10 @@ svg.ck{display:inline-block;color:var(--green2)}
         <label class="form-label">Seu melhor e-mail</label>
         <input class="form-input" type="email" id="campo-email" placeholder="seu@email.com" autocomplete="email">
       </div>
+      <div class="form-group">
+        <label class="form-label">Seu WhatsApp</label>
+        <input class="form-input" type="tel" id="campo-telefone" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="numeric">
+      </div>
       <button class="btn-g" style="margin-top:8px" onclick="irStep2()">Continuar →</button>
     </div>
 
@@ -435,10 +439,24 @@ svg.ck{display:inline-block;color:var(--green2)}
 <script>
 const BASE = 1990;
 let pixId=null, chkInterval=null, tmrInterval=null;
-let clienteNome='', clienteEmail='';
+let clienteNome='', clienteEmail='', clienteTelefone='';
 const bumpsAtivos = new Set();
 
 document.getElementById('dtop').textContent = new Date().toLocaleDateString('pt-BR');
+
+// Máscara telefone
+document.addEventListener('DOMContentLoaded', function() {
+  const tel = document.getElementById('campo-telefone');
+  if (tel) {
+    tel.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 11);
+      if (v.length > 6) v = '(' + v.substring(0,2) + ') ' + v.substring(2,7) + '-' + v.substring(7);
+      else if (v.length > 2) v = '(' + v.substring(0,2) + ') ' + v.substring(2);
+      else if (v.length > 0) v = '(' + v;
+      e.target.value = v;
+    });
+  }
+});
 
 function irParaCheckout() {
   document.getElementById('checkout').scrollIntoView({behavior:'smooth', block:'start'});
@@ -451,6 +469,7 @@ function irStep2() {
   if (!email || !email.includes('@')) { document.getElementById('campo-email').focus(); alert('Por favor informe um e-mail válido.'); return; }
   clienteNome = nome;
   clienteEmail = email;
+  clienteTelefone = document.getElementById('campo-telefone').value.trim();
   setStep(2);
 }
 
@@ -509,7 +528,7 @@ async function gerarPix() {
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ amount: total, description: desc, nome: clienteNome, email: clienteEmail, itens: getItens() })
+      body: JSON.stringify({ amount: total, description: desc, nome: clienteNome, email: clienteEmail, telefone: clienteTelefone, itens: getItens() })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
