@@ -345,7 +345,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="flow-line"></div>
       <div class="flow-step" id="fs-2"><div class="flow-num">2</div><span>Extras</span></div>
       <div class="flow-line"></div>
-      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>Pagar</span></div>
+      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>WhatsApp</span></div>
     </div>
 
     <!-- STEP 1: DADOS -->
@@ -404,16 +404,16 @@ svg.ck{display:inline-block;color:var(--green2)}
       <p style="text-align:center;margin-top:10px;font-size:12px;color:rgba(255,255,255,.28)">Pix gerado instantaneamente • sem sair da página</p>
     </div>
 
-    <!-- STEP 3: PIX -->
+    <!-- STEP 3: WHATSAPP -->
     <div class="step-panel" id="step-3">
-      <div class="pix-box">
-        <h3>Pague com Pix</h3>
-        <p class="pix-sub">Escaneie o QR Code ou copie o código abaixo</p>
-        <img class="qr-img" id="qr-img" src="" alt="QR Code Pix">
-        <div class="pix-code" id="pix-code" onclick="copiarCodigo()">Aguarde...</div>
-        <button class="btn-copy" onclick="copiarCodigo()">📋 Copiar código Pix</button>
-        <p class="timer-t">Expira em <span id="timer">60:00</span></p>
-        <div class="wait-t">Aguardando pagamento<div class="dots"><span></span><span></span><span></span></div></div>
+      <div class="pix-box" style="text-align:center;padding:32px 24px">
+        <div style="font-size:64px;margin-bottom:16px">💬</div>
+        <h3 style="margin-bottom:8px">Quase lá!</h3>
+        <p class="pix-sub" style="margin-bottom:24px">Clique no botão abaixo para finalizar seu pedido pelo WhatsApp. Enviaremos a chave Pix e seus materiais após a confirmação.</p>
+        <button class="btn-pay" onclick="gerarPix()" style="font-size:18px">
+          💬 Abrir WhatsApp agora
+        </button>
+        <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.35)">Atendimento em minutos · (11) 96784-3773</p>
       </div>
     </div>
 
@@ -473,6 +473,12 @@ function irStep2() {
   setStep(2);
 }
 
+function irStep3() {
+  setStep(3);
+  // Pequeno delay para a transição antes de abrir o WPP
+  setTimeout(gerarPix, 800);
+}
+
 function setStep(n) {
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('step-'+n).classList.add('active');
@@ -513,34 +519,32 @@ function getItens() {
   return itens;
 }
 
-async function gerarPix() {
-  const btn = document.getElementById('btn-pagar');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spin"></div> Gerando pagamento...';
-
+function gerarPix() {
   const valores = [450, 350];
   let total = BASE;
-  bumpsAtivos.forEach(i => { total += valores[i]; });
+  const itensNomes = ['Kit Completo Premium Copa 2026'];
+  bumpsAtivos.forEach(i => {
+    total += valores[i];
+    itensNomes.push(i === 0 ? 'Figurinha Premium Neymar (+R$4,50)' : 'Sticker Gold Raras (+R$3,50)');
+  });
 
-  const desc = 'Kit Figurinhas Copa 2026' + (bumpsAtivos.size ? ' + extras' : '');
+  const totalFmt = 'R$ ' + (total/100).toFixed(2).replace('.',',');
+  
+  const msg = `Olá! Quero comprar o Kit Figurinhas Copa 2026 🏆
 
-  try {
-    const res = await fetch('/api/create-checkout', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ amount: total, description: desc, nome: clienteNome, email: clienteEmail, telefone: clienteTelefone, itens: getItens() })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+👤 Nome: ${clienteNome}
+📧 Email: ${clienteEmail}
+📱 WhatsApp: ${clienteTelefone}
 
-    // Redireciona para o checkout hospedado do Abacate Pay
-    window.location.href = data.url;
+🛒 Pedido:
+${itensNomes.map(i => '• ' + i).join('\n')}
 
-  } catch(e) {
-    alert('Erro ao gerar pagamento: ' + e.message);
-    btn.disabled = false;
-    btn.innerHTML = '🔒 Pagar com Pix';
-  }
+💰 Total: ${totalFmt}
+
+Pode me enviar a chave Pix para pagamento?`;
+
+  const wppLink = 'https://wa.me/5511967843773?text=' + encodeURIComponent(msg);
+  window.open(wppLink, '_blank');
 }
 
 function copiarCodigo() {
