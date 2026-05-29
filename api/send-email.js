@@ -32,27 +32,26 @@ export default async function handler(req, res) {
 <body style="margin:0;padding:0;background:#05080D;font-family:'Helvetica Neue',Arial,sans-serif">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:40px 20px">
     <tr><td style="text-align:center;padding-bottom:32px">
-      <div style="font-size:42px">⚽</div>
-      <h1 style="color:#F5C518;font-size:28px;margin:8px 0 4px">Seu kit está pronto!</h1>
-      <p style="color:#8A9BB0;font-size:15px;margin:0">Kit Figurinhas Copa 2026</p>
+      <div style="font-size:48px">⚽</div>
+      <h1 style="color:#F5C518;font-size:26px;margin:8px 0 4px">Seu kit está pronto!</h1>
+      <p style="color:#8A9BB0;font-size:14px;margin:0">Kit Figurinhas Copa 2026</p>
     </td></tr>
     <tr><td style="background:#0C1219;border-radius:16px;padding:28px">
       <p style="color:#fff;font-size:16px;margin:0 0 8px">Olá, <strong>${nome || 'colecionador'}</strong>! 👋</p>
       <p style="color:#8A9BB0;font-size:14px;margin:0 0 24px;line-height:1.6">
-        Pagamento confirmado! Acesse seus materiais abaixo. Caso tenha dúvidas, entre em contato pelo WhatsApp: <strong style="color:#fff">(11) 96784-3773</strong>
+        Pagamento confirmado! Acesse seus materiais abaixo e baixe os arquivos.<br>
+        Dúvidas? Fale pelo WhatsApp: <strong style="color:#fff">(11) 96784-3773</strong>
       </p>
-      <table width="100%" cellpadding="0" cellspacing="0">
-        ${itensHtml}
-      </table>
+      <table width="100%" cellpadding="0" cellspacing="0">${itensHtml}</table>
     </td></tr>
     <tr><td style="padding:24px 0;text-align:center">
-      <p style="color:#8A9BB0;font-size:13px;margin:0 0 8px">Precisa de ajuda?</p>
+      <p style="color:#8A9BB0;font-size:13px;margin:0 0 12px">Precisa de ajuda?</p>
       <a href="https://wa.me/5511967843773" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:bold;padding:12px 28px;border-radius:50px;text-decoration:none">
         💬 WhatsApp Suporte
       </a>
     </td></tr>
     <tr><td style="text-align:center;padding-top:16px">
-      <p style="color:#333;font-size:12px">© 2026 Kit Figurinhas Copa 2026</p>
+      <p style="color:#444;font-size:12px">© 2026 Kit Figurinhas Copa 2026</p>
     </td></tr>
   </table>
 </body>
