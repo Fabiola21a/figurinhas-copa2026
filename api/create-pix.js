@@ -16,19 +16,18 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        amount: amount,
-        description: description || 'Kit Figurinhas Copa 2026',
-        expiresIn: 3600
+        data: {
+          amount: amount,
+          description: description || 'Kit Figurinhas Copa 2026',
+          expiresIn: 3600
+        }
       })
     });
 
-    const data = await response.json();
+    const json = await response.json();
+    if (!response.ok) return res.status(500).json({ error: JSON.stringify(json) });
 
-    if (!response.ok) {
-      return res.status(500).json({ error: JSON.stringify(data) });
-    }
-
-    const pix = data.data || data;
+    const pix = json.data || json;
     return res.status(200).json({
       id: pix.id,
       brCode: pix.brCode,
