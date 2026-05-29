@@ -5,32 +5,37 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo nao permitido' });
 
-  const { amount, description, nome, email, itens } = req.body;
-  if (!amount || amount < 100) return res.status(400).json({ error: 'Valor invalido' });
+  let { amount, description } = req.body;
+  amount = parseInt(amount);
+  if (!amount || amount < 100) return res.status(400).json({ error: 'Valor invalido: ' + amount });
+
+  // Abacate Pay v2 transparents — body sem wrapper
+  const pixBody = {
+    amount: amount,
+    description: description || 'Kit Figurinhas Copa 2026',
+    expiresIn: 3600
+  };
+
+  console.log('Enviando para Abacate:', JSON.stringify(pixBody));
 
   try {
-    const body = {
-      data: {
-        amount: Number(amount),
-        description: description || 'Kit Figurinhas Copa 2026',
-        expiresIn: 3600
-      }
-    };
-
     const response = await fetch('https://api.abacatepay.com/v2/transparents/create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.ABACATE_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(pixBody)
     });
 
-    const json = await response.json();
+    const text = await response.text();
+    console.log('Abacate raw response:', text);
 
-    if (!response.ok) {
-      console.error('Abacate error:', JSON.stringify(json));
-      return res.status(500).json({ error: JSON.stringify(json) });
+    let json;
+    try { json = JSON.parse(text); } catch(e) { return res.status(500).json({ error: 'Parse error: ' + text }); }
+
+    if (!response.ok || json.success === false) {
+      return res.status(500).json({ error: json.error || JSON.stringify(json) });
     }
 
     const pix = json.data || json;
