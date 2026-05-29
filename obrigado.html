@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido confirmado — Kit Figurinhas Copa 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#F5C518;--green:#009B3A;--green-light:#00C04B;--bg:#060A0F;--bg2:#0C1219;--white:#FFFFFF;--gray:#8A9BB0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
+.check-circle{width:88px;height:88px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 28px;animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,72px);line-height:1;margin-bottom:16px}
+h1 span{color:var(--gold)}
+p{font-size:18px;color:rgba(255,255,255,.7);line-height:1.6;max-width:480px;margin:0 auto 32px}
+.next-steps{background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:28px;max-width:480px;margin:0 auto;text-align:left}
+.step{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.step:last-child{margin-bottom:0}
+.step-num{width:32px;height:32px;background:var(--gold);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+.step-text strong{display:block;font-size:15px;margin-bottom:3px}
+.step-text p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.4}
+</style>
+</head>
+<body>
+<div>
+  <div class="check-circle">✅</div>
+  <h1>Pedido <span>confirmado!</span></h1>
+  <p>Seu kit está a caminho. Em instantes você vai receber tudo no seu WhatsApp.</p>
+  <div class="next-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>Verifique seu WhatsApp</strong><p>O link de acesso ao material será enviado em até 5 minutos.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>Baixe os arquivos</strong><p>Faça o download dos PDFs e salve em local seguro no seu celular ou computador.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>Imprima e cole</strong><p>Siga o guia de impressão incluído no kit e complete seu álbum!</p></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
