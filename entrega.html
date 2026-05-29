@@ -18,8 +18,8 @@ body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min
 .confirm-text p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.4}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,6vw,48px);margin-bottom:6px}
 .section-sub{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:28px;line-height:1.5}
-.item-card{background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--white);transition:border-color .2s,transform .15s}
-.item-card:hover{border-color:rgba(245,197,24,.35);transform:translateX(4px)}
+.item-card{background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--white);transition:border-color .2s,transform .15s,box-shadow .2s}
+.item-card:hover{border-color:rgba(245,197,24,.35);transform:translateX(4px);box-shadow:0 4px 24px rgba(245,197,24,.1)}
 .item-icon{width:52px;height:52px;border-radius:12px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.2);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
 .item-info{flex:1}
 .item-name{font-weight:700;font-size:16px;margin-bottom:3px}
@@ -42,7 +42,7 @@ body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min
 </style>
 </head>
 <body>
-<div class="top">✅ Pagamento confirmado — Seus materiais estão prontos!</div>
+<div class="top">✅ Pagamento confirmado — seus materiais estão prontos para download!</div>
 
 <div class="page">
   <div class="confirm">
@@ -70,12 +70,12 @@ body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min
     <h3>Precisa de ajuda?</h3>
     <p>Se os links não abrirem ou você tiver alguma dúvida sobre impressão, fale com nosso suporte. Respondemos rapidinho! 😊</p>
     <a href="https://wa.me/5511967843773?text=Olá!%20Comprei%20o%20Kit%20Figurinhas%20Copa%202026%20e%20preciso%20de%20ajuda." class="btn-wpp">
-      💬 Falar com Suporte
+      💬 Falar com Suporte agora
     </a>
     <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.35)">(11) 96784-3773 · WhatsApp</p>
   </div>
 
-  <p class="email-note" id="email-note">Também enviamos os links para o seu e-mail.</p>
+  <p class="email-note" id="email-note">📧 Também enviamos os links para o seu e-mail. Verifique a caixa de spam se não encontrar.</p>
 </div>
 
 <script>
