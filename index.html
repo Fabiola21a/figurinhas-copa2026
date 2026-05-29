@@ -345,7 +345,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="flow-line"></div>
       <div class="flow-step" id="fs-2"><div class="flow-num">2</div><span>Extras</span></div>
       <div class="flow-line"></div>
-      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>Pagamento</span></div>
+      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>Pagar</span></div>
     </div>
 
     <!-- STEP 1: DADOS -->
@@ -497,7 +497,7 @@ function getItens() {
 async function gerarPix() {
   const btn = document.getElementById('btn-pagar');
   btn.disabled = true;
-  btn.innerHTML = '<div class="spin"></div> Gerando Pix...';
+  btn.innerHTML = '<div class="spin"></div> Gerando pagamento...';
 
   const valores = [450, 350];
   let total = BASE;
@@ -506,7 +506,7 @@ async function gerarPix() {
   const desc = 'Kit Figurinhas Copa 2026' + (bumpsAtivos.size ? ' + extras' : '');
 
   try {
-    const res = await fetch('/api/create-pix', {
+    const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ amount: total, description: desc, nome: clienteNome, email: clienteEmail, itens: getItens() })
@@ -514,14 +514,11 @@ async function gerarPix() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
 
-    pixId = data.id;
-    document.getElementById('qr-img').src = 'data:image/png;base64,' + data.qrCodeImg;
-    document.getElementById('pix-code').textContent = data.brCode;
-    setStep(3);
-    iniciarTimer(3600);
-    iniciarVerificacao();
+    // Redireciona para o checkout hospedado do Abacate Pay
+    window.location.href = data.url;
+
   } catch(e) {
-    alert('Erro ao gerar Pix: ' + e.message);
+    alert('Erro ao gerar pagamento: ' + e.message);
     btn.disabled = false;
     btn.innerHTML = '🔒 Pagar com Pix';
   }
