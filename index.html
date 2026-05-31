@@ -346,7 +346,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="flow-line"></div>
       <div class="flow-step" id="fs-2"><div class="flow-num">2</div><span>Extras</span></div>
       <div class="flow-line"></div>
-      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>WhatsApp</span></div>
+      <div class="flow-step" id="fs-3"><div class="flow-num">3</div><span>Pagamento</span></div>
     </div>
 
     <!-- STEP 1: DADOS -->
@@ -405,16 +405,13 @@ svg.ck{display:inline-block;color:var(--green2)}
       <p style="text-align:center;margin-top:10px;font-size:12px;color:rgba(255,255,255,.28)">Pix gerado instantaneamente • sem sair da página</p>
     </div>
 
-    <!-- STEP 3: WHATSAPP -->
+    <!-- STEP 3: REDIRECT WIAPY -->
     <div class="step-panel" id="step-3">
       <div class="pix-box" style="text-align:center;padding:32px 24px">
-        <div style="font-size:64px;margin-bottom:16px">💬</div>
-        <h3 style="margin-bottom:8px">Quase lá!</h3>
-        <p class="pix-sub" style="margin-bottom:24px">Clique no botão abaixo para finalizar seu pedido pelo WhatsApp. Enviaremos a chave Pix e seus materiais após a confirmação.</p>
-        <button class="btn-pay" onclick="gerarPix()" style="font-size:18px">
-          💬 Abrir WhatsApp agora
-        </button>
-        <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.35)">Atendimento em minutos · (11) 93622-7155</p>
+        <div style="font-size:64px;margin-bottom:16px">🔒</div>
+        <h3 style="margin-bottom:8px">Redirecionando...</h3>
+        <p class="pix-sub" style="margin-bottom:24px">Você será redirecionado para o pagamento seguro via Pix.</p>
+        <div class="spin" style="margin:0 auto"></div>
       </div>
     </div>
 
@@ -521,31 +518,12 @@ function getItens() {
 }
 
 function gerarPix() {
-  const valores = [450, 350];
-  let total = BASE;
-  const itensNomes = ['Kit Completo Premium Copa 2026'];
-  bumpsAtivos.forEach(i => {
-    total += valores[i];
-    itensNomes.push(i === 0 ? 'Figurinha Premium Neymar (+R$4,50)' : 'Sticker Gold Raras (+R$3,50)');
-  });
-
-  const totalFmt = 'R$ ' + (total/100).toFixed(2).replace('.',',');
-  
-  const msg = `Olá! Quero comprar o Kit Figurinhas Copa 2026 🏆
-
-👤 Nome: ${clienteNome}
-📧 Email: ${clienteEmail}
-📱 WhatsApp: ${clienteTelefone}
-
-🛒 Pedido:
-${itensNomes.map(i => '• ' + i).join('\n')}
-
-💰 Total: ${totalFmt}
-
-Pode me enviar a chave Pix para pagamento?`;
-
-  const wppLink = 'https://wa.me/5511936227155?text=' + encodeURIComponent(msg);
-  window.open(wppLink, '_blank');
+  // Redirecionar para checkout Wiapy
+  const url = 'https://pay.wiapy.com/kjlpt51ywe' +
+    '?name=' + encodeURIComponent(clienteNome) +
+    '&email=' + encodeURIComponent(clienteEmail) +
+    '&phone=' + encodeURIComponent(clienteTelefone);
+  window.location.href = url;
 }
 
 function copiarCodigo() {
