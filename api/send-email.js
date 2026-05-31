@@ -18,9 +18,9 @@ export default async function handler(req, res) {
   const itensArray = Array.isArray(itens) ? itens : [];
 
   const linksHtml = itensArray.map(item => {
-    const key       = typeof item === 'string' ? item : item.key;
-    const nomeItem  = typeof item === 'string' ? key  : (item.nome || key);
-    const link      = LINKS[key] || '#';
+    const key      = typeof item === 'string' ? item : item.key;
+    const nomeItem = typeof item === 'string' ? key  : (item.nome || key);
+    const link     = LINKS[key] || '#';
     return `
       <tr>
         <td style="padding:14px 0;border-bottom:1px solid #1e2a3a;">
@@ -67,60 +67,31 @@ export default async function handler(req, res) {
   </table>
 </body></html>`;
 
-  // Tenta Brevo primeiro (BREVO_API_KEY no Vercel), depois Resend como fallback
-  const BREVO_KEY  = process.env.BREVO_API_KEY;
-  const RESEND_KEY = process.env.RESEND_API_KEY;
+  try {
+    const r = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': process.env.BREVO_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sender:      { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@gmail.com' },
+        to:          [{ email }],
+        subject:     '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
+        htmlContent: htmlBody,
+      }),
+    });
 
-  if (BREVO_KEY) {
-    // Brevo Transactional Email API — aceita qualquer destinatario sem dominio proprio
-    try {
-      const r = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'api-key': BREVO_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender:  { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@gmail.com' },
-          to:      [{ email }],
-          subject: '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
-          htmlContent: htmlBody,
-        }),
-      });
-      const data = await r.json();
-      console.log('Brevo response:', JSON.stringify(data));
-      if (!r.ok) throw new Error(data?.message || JSON.stringify(data));
-      return res.status(200).json({ ok: true, provider: 'brevo', messageId: data.messageId });
-    } catch (err) {
-      console.error('Brevo error, tentando Resend:', err.message);
-      // fallthrough para Resend
+    const data = await r.json();
+    console.log('Brevo response:', JSON.stringify(data));
+
+    if (!r.ok) {
+      return res.status(r.status).json({ error: data?.message || JSON.stringify(data) });
     }
-  }
+    return res.status(200).json({ ok: true, messageId: data.messageId });
 
-  if (RESEND_KEY) {
-    try {
-      const r = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${RESEND_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from:    'Kit Figurinhas Copa 2026 <onboarding@resend.dev>',
-          to:      [email],
-          subject: '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
-          html:    htmlBody,
-        }),
-      });
-      const data = await r.json();
-      console.log('Resend response:', JSON.stringify(data));
-      if (!r.ok) throw new Error(data?.message || JSON.stringify(data));
-      return res.status(200).json({ ok: true, provider: 'resend', id: data.id });
-    } catch (err) {
-      console.error('Resend error:', err.message);
-      return res.status(500).json({ error: err.message, provider: 'resend' });
-    }
+  } catch (err) {
+    console.error('send-email error:', err);
+    return res.status(500).json({ error: err.message });
   }
-
-  return res.status(500).json({ error: 'Nenhuma chave de email configurada (BREVO_API_KEY ou RESEND_API_KEY)' });
 }
