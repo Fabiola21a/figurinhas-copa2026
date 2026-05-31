@@ -75,9 +75,12 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        sender:      { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@gmail.com' },
-        to:          [{ email }],
-        subject:     '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
+        // Remetente: dominio brevosend.com ja verificado pelo Brevo
+        // Reply-To: gmail da vendedora para respostas chegarem certo
+        sender:   { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@11034509.brevosend.com' },
+        replyTo:  { email: 'tikflow.assets@gmail.com' },
+        to:       [{ email }],
+        subject:  '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
         htmlContent: htmlBody,
       }),
     });
