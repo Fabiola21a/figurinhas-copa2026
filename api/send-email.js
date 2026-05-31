@@ -75,22 +75,16 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // Remetente: dominio brevosend.com ja verificado pelo Brevo
-        // Reply-To: gmail da vendedora para respostas chegarem certo
-        sender:   { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@11034509.brevosend.com' },
-        replyTo:  { email: 'tikflow.assets@gmail.com' },
-        to:       [{ email }],
-        subject:  '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
+        sender:      { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@gmail.com' },
+        to:          [{ email }],
+        subject:     '⚽ Seu Kit de Figurinhas da Copa 2026 chegou!',
         htmlContent: htmlBody,
       }),
     });
 
     const data = await r.json();
     console.log('Brevo response:', JSON.stringify(data));
-
-    if (!r.ok) {
-      return res.status(r.status).json({ error: data?.message || JSON.stringify(data) });
-    }
+    if (!r.ok) return res.status(r.status).json({ error: data?.message || JSON.stringify(data) });
     return res.status(200).json({ ok: true, messageId: data.messageId });
 
   } catch (err) {
