@@ -107,13 +107,23 @@ const LINKS = {
   }
 };
 
-function init() {
-  // Ler dados da URL
+async function init() {
   const params = new URLSearchParams(window.location.search);
-  const nome = params.get('nome') || '';
-  const email = params.get('email') || '';
-  const itensParam = params.get('itens') || 'principal';
-  const itens = itensParam.split(',');
+  const emailParam = params.get('email') || '';
+  const nomeParam  = params.get('nome')  || '';
+
+  // Buscar itens comprados via API (webhook salvou lá)
+  let itens = ['principal'];
+  let nome  = nomeParam;
+
+  if (emailParam) {
+    try {
+      const r = await fetch('/api/get-itens?email=' + encodeURIComponent(emailParam));
+      const d = await r.json();
+      if (d.itens && d.itens.length) itens = d.itens;
+      if (d.nome) nome = d.nome;
+    } catch(e) {}
+  }
 
   // Atualizar nome
   if (nome) {
@@ -121,9 +131,9 @@ function init() {
   }
 
   // Email note
-  if (email) {
-    document.getElementById('email-note').innerHTML = 
-      `📧 Também enviamos os links para <strong>${email}</strong>`;
+  if (emailParam) {
+    document.getElementById('email-note').innerHTML =
+      `📧 Também enviamos os links para <strong>${emailParam}</strong>`;
   }
 
   // Montar cards de links
@@ -141,16 +151,6 @@ function init() {
         <div class="item-arrow">→</div>
       </a>`;
   });
-
-  // Enviar email
-  if (email && itens.length) {
-    const itensEmail = itens.map(key => ({ key, nome: LINKS[key]?.nome || key }));
-    fetch('/api/send-email', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ nome, email, itens: itensEmail })
-    }).catch(() => {});
-  }
 }
 
 init();
