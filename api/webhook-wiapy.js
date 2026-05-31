@@ -2,32 +2,25 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo nao permitido' });
 
-  // Verificar token
   const WEBHOOK_TOKEN = process.env.WIAPY_WEBHOOK_TOKEN;
   if (WEBHOOK_TOKEN) {
     const auth = req.headers['authorization'] || '';
-    if (auth !== WEBHOOK_TOKEN) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    if (auth !== WEBHOOK_TOKEN) return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const body    = req.body || {};
+  const body     = req.body || {};
   const payment  = body.payment  || {};
   const customer = body.customer || {};
   const checkout = body.checkout || {};
   const products = body.products || [];
 
-  // Só processar pagamentos aprovados
   if (payment.status !== 'paid') {
     return res.status(200).json({ ok: true, skipped: true, status: payment.status });
   }
 
   const nome  = customer.name  || '';
   const email = customer.email || '';
-
-  if (!email) {
-    return res.status(200).json({ ok: true, warning: 'Email ausente' });
-  }
+  if (!email) return res.status(200).json({ ok: true, warning: 'Email ausente' });
 
   // Detectar produtos comprados
   const MAPA = {
@@ -60,7 +53,6 @@ export default async function handler(req, res) {
     cartela:   'https://drive.google.com/drive/folders/1MAd00A-mElCaN_Wj35C41HL5a0YyS6T7?usp=drive_link',
   };
 
-  // Montar itens
   const itensSet = new Set(['principal']);
   for (const ob of (checkout.orderbump || [])) {
     const k = detectar(ob.title);
@@ -70,10 +62,21 @@ export default async function handler(req, res) {
     const k = detectar(p.title);
     if (k) itensSet.add(k);
   }
-
   const itens = [...itensSet];
 
-  // Montar HTML do email
+  // Salvar no cache para a página de entrega buscar
+  const BASE_URL = 'https://kitfigurinhas-copa2026.vercel.app';
+  try {
+    await fetch(`${BASE_URL}/api/get-itens`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, nome, itens }),
+    });
+  } catch(e) {
+    console.error('Erro ao salvar cache:', e.message);
+  }
+
+  // Montar email HTML
   const linksHtml = itens.map(key => {
     const link     = LINKS[key] || '#';
     const nomeItem = NOMES[key] || key;
@@ -123,14 +126,11 @@ export default async function handler(req, res) {
   </table>
 </body></html>`;
 
-  // Enviar email direto pelo Brevo (sem chamar outra rota)
+  // Enviar email
   try {
     const r = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
-      headers: {
-        'api-key': process.env.BREVO_API_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'api-key': process.env.BREVO_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sender:      { name: 'Kit Figurinhas Copa 2026', email: 'tikflow.assets@gmail.com' },
         to:          [{ email }],
@@ -138,17 +138,9 @@ export default async function handler(req, res) {
         htmlContent: htmlBody,
       }),
     });
-
     const data = await r.json();
     console.log('Email enviado:', email, JSON.stringify(data));
-
-    return res.status(200).json({
-      ok: true,
-      email,
-      itens,
-      messageId: data.messageId,
-    });
-
+    return res.status(200).json({ ok: true, email, itens, messageId: data.messageId });
   } catch (err) {
     console.error('Erro email:', err);
     return res.status(200).json({ ok: false, error: err.message });
