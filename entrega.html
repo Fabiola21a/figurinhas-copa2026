@@ -109,7 +109,7 @@ const LINKS = {
 
 async function init() {
   const params   = new URLSearchParams(window.location.search);
-  const sellId   = params.get('wiapy_sell') || '';
+  const sellId   = params.get('checkout_id') || params.get('wiapy_sell') || '';
   const emailParam = params.get('email') || '';
   const nomeParam  = params.get('nome')  || '';
 
