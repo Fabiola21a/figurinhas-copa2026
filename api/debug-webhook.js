@@ -1,15 +1,20 @@
-// Endpoint de debug — captura e armazena o payload da Wiapy
 const logs = global._debugLogs || (global._debugLogs = []);
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+
   if (req.method === 'GET') {
-    return res.status(200).json({ logs: logs.slice(-5) });
+    return res.status(200).json({ count: logs.length, logs: logs.slice(-3) });
   }
+
   if (req.method === 'POST') {
-    logs.push({ ts: new Date().toISOString(), headers: req.headers, body: req.body });
-    if (logs.length > 10) logs.shift();
+    const entry = { ts: new Date().toISOString(), body: req.body };
+    logs.push(entry);
+    if (logs.length > 5) logs.shift();
+    // Logar TUDO no console do Vercel
+    console.log('WIAPY_PAYLOAD:', JSON.stringify(req.body, null, 2));
     return res.status(200).json({ ok: true });
   }
+
   res.status(405).end();
 }
