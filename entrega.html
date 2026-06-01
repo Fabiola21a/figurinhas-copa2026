@@ -141,9 +141,10 @@ async function init() {
   }
 
   // Email note
-  if (emailParam) {
+  const emailShow = emailLocal || params.get('email') || '';
+  if (emailShow) {
     document.getElementById('email-note').innerHTML =
-      `📧 Também enviamos os links para <strong>${emailParam}</strong>`;
+      `📧 Também enviamos os links para <strong>${emailShow}</strong>`;
   }
 
   // Montar cards de links
