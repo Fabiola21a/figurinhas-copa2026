@@ -14,15 +14,18 @@ export default async function handler(req, res) {
   const checkout = body.checkout || {};
   const products = body.products || [];
 
+  console.log('Wiapy webhook body:', JSON.stringify(body));
+
   if (payment.status !== 'paid') {
     return res.status(200).json({ ok: true, skipped: true, status: payment.status });
   }
 
-  const nome  = customer.name  || '';
-  const email = customer.email || '';
+  const nome   = customer.name  || '';
+  const email  = customer.email || '';
+  const sellId = payment.id || body.id || body.sell_id || '';
+
   if (!email) return res.status(200).json({ ok: true, warning: 'Email ausente' });
 
-  // Detectar produtos comprados
   const MAPA = {
     principal: ['kit', 'principal', 'completo', 'copa 2026', 'figurinhas copa'],
     neymar:    ['neymar'],
@@ -64,19 +67,19 @@ export default async function handler(req, res) {
   }
   const itens = [...itensSet];
 
-  // Salvar no cache para a página de entrega buscar
+  // Salvar no cache por email E por sellId
   const BASE_URL = 'https://kitfigurinhas-copa2026.vercel.app';
   try {
     await fetch(`${BASE_URL}/api/get-itens`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, nome, itens }),
+      body: JSON.stringify({ email, nome, itens, sellId }),
     });
   } catch(e) {
     console.error('Erro ao salvar cache:', e.message);
   }
 
-  // Montar email HTML
+  // Montar email
   const linksHtml = itens.map(key => {
     const link     = LINKS[key] || '#';
     const nomeItem = NOMES[key] || key;
@@ -126,7 +129,6 @@ export default async function handler(req, res) {
   </table>
 </body></html>`;
 
-  // Enviar email
   try {
     const r = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -140,7 +142,7 @@ export default async function handler(req, res) {
     });
     const data = await r.json();
     console.log('Email enviado:', email, JSON.stringify(data));
-    return res.status(200).json({ ok: true, email, itens, messageId: data.messageId });
+    return res.status(200).json({ ok: true, email, itens, sellId, messageId: data.messageId });
   } catch (err) {
     console.error('Erro email:', err);
     return res.status(200).json({ ok: false, error: err.message });
