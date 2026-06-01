@@ -116,7 +116,7 @@ async function init() {
 
   // Tentar pegar email do localStorage (salvo pelo modal do site)
   let emailLocal = '';
-  try { emailLocal = localStorage.getItem('comprador_email') || ''; } catch(e) {}
+  try { const m = document.cookie.match(/comprador_email=([^;]+)/); emailLocal = m ? decodeURIComponent(m[1]) : ''; } catch(e) {}
 
   if (emailLocal) {
     // Polling: tentar ate 20x com intervalo de 3s (60s total)
@@ -127,7 +127,7 @@ async function init() {
         if (d.found && d.itens && d.itens.length) {
           itens = d.itens;
           nome  = d.nome || nomeParam;
-          try { localStorage.removeItem('comprador_email'); } catch(e) {}
+          document.cookie = 'comprador_email=; path=/; max-age=0';
           break;
         }
       } catch(e) {}
