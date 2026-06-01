@@ -327,7 +327,7 @@ function irParaWiapy(inputId) {
     if (input) { input.focus(); input.style.borderColor = 'rgba(232,20,60,.6)'; }
     return;
   }
-  try { localStorage.setItem('comprador_email', email); } catch(e) {}
+  document.cookie = 'comprador_email=' + encodeURIComponent(email) + '; path=/; max-age=3600; SameSite=Lax';
   window.location.href = WIAPY_URL + '?email=' + encodeURIComponent(email);
 }
 
