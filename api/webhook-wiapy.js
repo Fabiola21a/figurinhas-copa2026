@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const checkout = body.checkout || {};
   const products = body.products || [];
 
-  console.log('Wiapy webhook body:', JSON.stringify(body));
+  console.log('Wiapy webhook:', JSON.stringify(body));
 
   if (payment.status !== 'paid') {
     return res.status(200).json({ ok: true, skipped: true, status: payment.status });
@@ -67,19 +67,25 @@ export default async function handler(req, res) {
   }
   const itens = [...itensSet];
 
-  // Salvar no cache por email E por sellId
-  const BASE_URL = 'https://kitfigurinhas-copa2026.vercel.app';
+  // Salvar no Supabase
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://rzvcxrftygrddxfjmmqy.supabase.co';
+  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
   try {
-    await fetch(`${BASE_URL}/api/get-itens`, {
+    const sr = await fetch(`${SUPABASE_URL}/rest/v1/figurinhas_orders`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, nome, itens, sellId }),
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.toLowerCase(), nome, itens, payment_id: sellId })
     });
+    console.log('Supabase status:', sr.status, 'email:', email, 'itens:', itens);
   } catch(e) {
-    console.error('Erro ao salvar cache:', e.message);
+    console.error('Erro Supabase:', e.message);
   }
 
-  // Montar email
+  // Montar email HTML
   const linksHtml = itens.map(key => {
     const link     = LINKS[key] || '#';
     const nomeItem = NOMES[key] || key;
