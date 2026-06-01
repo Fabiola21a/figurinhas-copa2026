@@ -328,7 +328,7 @@ function irParaWiapy(inputId) {
     return;
   }
   try { localStorage.setItem('comprador_email', email); } catch(e) {}
-  window.location.href = WIAPY_URL;
+  window.location.href = WIAPY_URL + '?email=' + encodeURIComponent(email);
 }
 
 // Enter nos campos de email
