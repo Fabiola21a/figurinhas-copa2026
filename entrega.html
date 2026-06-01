@@ -108,17 +108,22 @@ const LINKS = {
 };
 
 async function init() {
-  const params = new URLSearchParams(window.location.search);
+  const params   = new URLSearchParams(window.location.search);
+  const sellId   = params.get('wiapy_sell') || '';
   const emailParam = params.get('email') || '';
   const nomeParam  = params.get('nome')  || '';
 
-  // Buscar itens comprados via API (webhook salvou lá)
   let itens = ['principal'];
   let nome  = nomeParam;
 
-  if (emailParam) {
+  // Buscar por sellId primeiro, depois por email
+  const query = sellId && sellId !== 'undefined'
+    ? '/api/get-itens?sellId=' + encodeURIComponent(sellId)
+    : emailParam ? '/api/get-itens?email=' + encodeURIComponent(emailParam) : null;
+
+  if (query) {
     try {
-      const r = await fetch('/api/get-itens?email=' + encodeURIComponent(emailParam));
+      const r = await fetch(query);
       const d = await r.json();
       if (d.itens && d.itens.length) itens = d.itens;
       if (d.nome) nome = d.nome;
