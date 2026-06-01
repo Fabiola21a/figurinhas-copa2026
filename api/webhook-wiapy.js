@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
   const nome   = customer.name  || '';
   const email  = customer.email || '';
-  const sellId = checkout.id || payment.id || body.id || '';
+  const sellId = payment.id || '';
 
   if (!email) return res.status(200).json({ ok: true, warning: 'Email ausente' });
 
