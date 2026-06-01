@@ -108,26 +108,32 @@ const LINKS = {
 };
 
 async function init() {
-  const params   = new URLSearchParams(window.location.search);
-  const sellId   = params.get('payment_id') || '';
-  const emailParam = params.get('email') || '';
-  const nomeParam  = params.get('nome')  || '';
+  const params     = new URLSearchParams(window.location.search);
+  const nomeParam  = params.get('nome') || '';
 
   let itens = ['principal'];
   let nome  = nomeParam;
 
-  // Buscar por sellId primeiro, depois por email
-  const query = sellId && sellId !== 'undefined'
-    ? '/api/get-itens?sellId=' + encodeURIComponent(sellId)
-    : emailParam ? '/api/get-itens?email=' + encodeURIComponent(emailParam) : null;
+  // Ler email do localStorage (salvo antes de ir para a Wiapy)
+  let emailLocal = '';
+  try { emailLocal = localStorage.getItem('comprador_email') || ''; } catch(e) {}
 
-  if (query) {
-    try {
-      const r = await fetch(query);
-      const d = await r.json();
-      if (d.itens && d.itens.length) itens = d.itens;
-      if (d.nome) nome = d.nome;
-    } catch(e) {}
+  if (emailLocal) {
+    // Polling: tentar até 10x com intervalo de 2s para dar tempo do webhook chegar
+    for (let i = 0; i < 10; i++) {
+      try {
+        const r = await fetch('/api/get-itens?email=' + encodeURIComponent(emailLocal));
+        const d = await r.json();
+        if (d.found && d.itens && d.itens.length) {
+          itens = d.itens;
+          nome  = d.nome || nomeParam;
+          break;
+        }
+      } catch(e) {}
+      if (i < 9) await new Promise(res => setTimeout(res, 2000));
+    }
+    // Limpar localStorage após usar
+    try { localStorage.removeItem('comprador_email'); } catch(e) {}
   }
 
   // Atualizar nome
