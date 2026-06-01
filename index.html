@@ -173,7 +173,7 @@ svg.ck{display:inline-block;color:var(--green2)}
     </div>
     <span><strong>+2.458 famílias</strong> já completaram o álbum</span>
   </div>
-  <a href="https://pay.wiapy.com/kjlpt51ywe" class="btn-g">⚽ Garantir meu Kit por R$&nbsp;19,90</a>
+  <a href="#" onclick="abrirCheckout();return false;" class="btn-g">⚽ Garantir meu Kit por R$&nbsp;19,90</a>
   <p class="btn-sub">🔒 Pagamento seguro via Pix · 30 dias de garantia</p>
 </section>
 
@@ -283,7 +283,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="brow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2.5" width="14" height="14" style="flex-shrink:0;margin-top:2px"><path d="M20 6L9 17l-5-5"/></svg><p><strong>OFICIAL FIFA:</strong> Guia de Impressão Premium</p></div>
     </div>
     <div class="dnote"><span class="di">📥</span><div><strong>Acesso imediato por download</strong>Após o pagamento você acessa os arquivos direto pelo site e também recebe no seu e-mail.</div></div>
-    <button class="btn-g" onclick="window.location.href='https://pay.wiapy.com/kjlpt51ywe'">⚽ Quero completar meu álbum por R$&nbsp;19,90</button>
+    <button class="btn-g" onclick="abrirCheckout()">⚽ Quero completar meu álbum por R$&nbsp;19,90</button>
     <div class="tbar"><span>🛡️ 30 dias de garantia</span><span>🔒 Pix seguro</span><span>⚡ Acesso imediato</span></div>
   </div>
 </section>
@@ -306,8 +306,65 @@ svg.ck{display:inline-block;color:var(--green2)}
 
 <footer><p>© 2026 Kit Figurinhas Copa 2026 · Produto digital · Entrega via Google Drive<br>Suporte: <a href="https://wa.me/5511936227155" style="color:var(--gold)">(11) 93622-7155</a> · Respondemos em minutos</p></footer>
 
+<style>
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:#0C1219;border:1.5px solid rgba(245,197,24,.25);border-radius:20px;padding:36px 28px;width:100%;max-width:420px;text-align:center}
+.modal-box h3{font-family:"Bebas Neue",sans-serif;font-size:28px;color:#fff;margin-bottom:8px}
+.modal-box p{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:22px;line-height:1.6}
+.modal-input{width:100%;background:#05080D;border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 16px;font-size:16px;color:#fff;font-family:"Barlow",sans-serif;outline:none;margin-bottom:14px;-webkit-appearance:none}
+.modal-input:focus{border-color:rgba(245,197,24,.5)}
+.modal-input::placeholder{color:rgba(255,255,255,.25)}
+</style>
+
+<!-- Modal de email -->
+<div class="modal-overlay" id="modal-email">
+  <div class="modal-box">
+    <div style="font-size:40px;margin-bottom:12px">⚽</div>
+    <h3>Qual seu melhor email?</h3>
+    <p>Vamos enviar seus materiais por email também — assim você acessa de qualquer lugar.</p>
+    <input class="modal-input" type="email" id="modal-email-input" placeholder="seu@email.com" inputmode="email" autocomplete="email">
+    <button class="btn-g" style="font-size:16px;padding:16px 32px" onclick="confirmarEmail()">
+      🔒 Ir para o pagamento
+    </button>
+    <p style="font-size:12px;color:rgba(255,255,255,.25);margin-top:12px">Seus dados estão seguros</p>
+  </div>
+</div>
+
 <script>
 document.getElementById('dtop').textContent = new Date().toLocaleDateString('pt-BR');
+
+const WIAPY_URL = 'https://pay.wiapy.com/kjlpt51ywe';
+
+function abrirCheckout() {
+  document.getElementById('modal-email').classList.add('open');
+  setTimeout(() => document.getElementById('modal-email-input').focus(), 100);
+}
+
+function confirmarEmail() {
+  const email = document.getElementById('modal-email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('modal-email-input').focus();
+    return;
+  }
+  // Salvar email no localStorage para a entrega usar
+  try { localStorage.setItem('comprador_email', email); } catch(e) {}
+  // Ir para Wiapy
+  window.location.href = WIAPY_URL;
+}
+
+// Fechar modal clicando fora
+document.getElementById('modal-email').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+
+// Enter no campo de email
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('modal-email-input');
+  if (input) input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') confirmarEmail();
+  });
+});
 </script>
 </body>
 </html>
