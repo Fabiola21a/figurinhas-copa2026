@@ -1,3 +1,5 @@
+const SUPA_URL = "https://ezdssuwtfpaptszkboeo.supabase.co";
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo nao permitido' });
@@ -68,19 +70,18 @@ export default async function handler(req, res) {
   const itens = [...itensSet];
 
   // Salvar no Supabase
-  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://rzvcxrftygrddxfjmmqy.supabase.co';
-  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+  const SUPA_KEY = process.env.SUPABASE_ANON_KEY;
   try {
-    const sr = await fetch(`${SUPABASE_URL}/rest/v1/figurinhas_orders`, {
+    const sr = await fetch(`${SUPA_URL}/rest/v1/kit_orders`, {
       method: 'POST',
       headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email: email.toLowerCase(), nome, itens, payment_id: sellId })
     });
-    console.log('Supabase status:', sr.status, 'email:', email, 'itens:', itens);
+    console.log('Supabase insert status:', sr.status, 'email:', email, 'itens:', itens);
   } catch(e) {
     console.error('Erro Supabase:', e.message);
   }
@@ -148,7 +149,7 @@ export default async function handler(req, res) {
     });
     const data = await r.json();
     console.log('Email enviado:', email, JSON.stringify(data));
-    return res.status(200).json({ ok: true, email, itens, sellId, messageId: data.messageId });
+    return res.status(200).json({ ok: true, email, itens, messageId: data.messageId });
   } catch (err) {
     console.error('Erro email:', err);
     return res.status(200).json({ ok: false, error: err.message });
