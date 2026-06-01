@@ -119,22 +119,21 @@ async function init() {
   try { emailLocal = localStorage.getItem('comprador_email') || ''; } catch(e) {}
 
   if (emailLocal) {
-    // Polling: tentar até 10x com intervalo de 2s
-    for (let i = 0; i < 10; i++) {
+    // Polling: tentar ate 20x com intervalo de 3s (60s total)
+    for (let i = 0; i < 20; i++) {
       try {
         const r = await fetch('/api/get-itens?email=' + encodeURIComponent(emailLocal));
         const d = await r.json();
         if (d.found && d.itens && d.itens.length) {
           itens = d.itens;
           nome  = d.nome || nomeParam;
+          try { localStorage.removeItem('comprador_email'); } catch(e) {}
           break;
         }
       } catch(e) {}
-      if (i < 9) await new Promise(res => setTimeout(res, 2000));
+      if (i < 19) await new Promise(res => setTimeout(res, 3000));
     }
-    try { localStorage.removeItem('comprador_email'); } catch(e) {}
   }
-  // Se nao encontrou nada, mostra principal como fallback garantido
 
   // Atualizar nome
   if (nome) {
