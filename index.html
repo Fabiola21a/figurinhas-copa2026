@@ -174,8 +174,7 @@ svg.ck{display:inline-block;color:var(--green2)}
     <span><strong>+2.458 famílias</strong> já completaram o álbum</span>
   </div>
   <div style="width:100%;max-width:460px">
-  <input class="form-input" type="email" id="email-hero" placeholder="Digite seu melhor e-mail" inputmode="email" autocomplete="email" style="width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 16px;font-size:16px;color:#fff;font-family:'Barlow',sans-serif;outline:none;margin-bottom:10px;-webkit-appearance:none">
-  <a href="#" onclick="irParaWiapy('email-hero');return false;" class="btn-g">⚽ Garantir meu Kit por R$&nbsp;19,90</a>
+  <a href="#" onclick="abrirModal();return false;" class="btn-g">⚽ Garantir meu Kit por R$&nbsp;19,90</a>
 </div>
   <p class="btn-sub">🔒 Pagamento seguro via Pix · 30 dias de garantia</p>
 </section>
@@ -286,7 +285,7 @@ svg.ck{display:inline-block;color:var(--green2)}
       <div class="brow"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2.5" width="14" height="14" style="flex-shrink:0;margin-top:2px"><path d="M20 6L9 17l-5-5"/></svg><p><strong>OFICIAL FIFA:</strong> Guia de Impressão Premium</p></div>
     </div>
     <div class="dnote"><span class="di">📥</span><div><strong>Acesso imediato por download</strong>Após o pagamento você acessa os arquivos direto pelo site e também recebe no seu e-mail.</div></div>
-    <button class="btn-g" onclick="irParaWiapy('email-oferta')">⚽ Quero completar meu álbum por R$&nbsp;19,90</button>
+    <button class="btn-g" onclick="abrirModal()">⚽ Quero completar meu álbum por R$&nbsp;19,90</button>
     <div class="tbar"><span>🛡️ 30 dias de garantia</span><span>🔒 Pix seguro</span><span>⚡ Acesso imediato</span></div>
   </div>
 </section>
@@ -309,8 +308,36 @@ svg.ck{display:inline-block;color:var(--green2)}
 
 <footer><p>© 2026 Kit Figurinhas Copa 2026 · Produto digital · Entrega via Google Drive<br>Suporte: <a href="https://wa.me/5511936227155" style="color:var(--gold)">(11) 93622-7155</a> · Respondemos em minutos</p></footer>
 
-<style>
+<!-- MODAL EMAIL -->
+<div id="emailModal" class="modal-ov" onclick="if(event.target===this)fecharModal()">
+  <div class="modal-bx" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-x" onclick="fecharModal()" aria-label="Fechar">&times;</button>
+    <div class="modal-emoji">⚽</div>
+    <h3 id="modalTitle" class="modal-t">Falta só o seu e-mail</h3>
+    <p class="modal-p">É pra onde enviamos os links do seu kit logo após o Pix.</p>
+    <input class="modal-input" type="email" id="email-modal" placeholder="Digite seu melhor e-mail" inputmode="email" autocomplete="email">
+    <p id="modalErr" class="modal-err">Digite um e-mail válido pra continuar.</p>
+    <button class="btn-g" onclick="confirmarEmail()">Continuar para o pagamento →</button>
+    <p class="modal-sub">🔒 Pagamento seguro via Pix · 30 dias de garantia</p>
+  </div>
+</div>
 
+<style>
+.modal-ov{display:none;position:fixed;inset:0;z-index:1000;background:rgba(3,5,9,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal-bx{position:relative;width:100%;max-width:420px;background:var(--bg2);border:1px solid rgba(245,197,24,.22);border-radius:22px;padding:34px 26px 28px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:modalUp .22s ease}
+@keyframes modalUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-x{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:30px;line-height:1;cursor:pointer;padding:4px}
+.modal-x:hover{color:#fff}
+.modal-emoji{font-size:40px;margin-bottom:8px}
+.modal-t{font-family:"Bebas Neue",sans-serif;font-size:32px;line-height:1;color:#fff;margin-bottom:8px;letter-spacing:.02em}
+.modal-p{font-size:15px;color:rgba(255,255,255,.6);line-height:1.45;margin-bottom:20px}
+.modal-input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);border-radius:12px;padding:15px 16px;font-size:16px;color:#fff;font-family:"Barlow",sans-serif;outline:none;margin-bottom:8px;-webkit-appearance:none;text-align:center}
+.modal-input:focus{border-color:rgba(245,197,24,.55)}
+.modal-err{display:none;color:#ff6b81;font-size:13px;font-weight:600;margin-bottom:10px}
+.modal-err.show{display:block}
+.modal-bx .btn-g{margin-top:6px;font-size:17px;padding:18px 32px}
+.modal-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:12px;letter-spacing:.03em}
 </style>
 
 
@@ -320,24 +347,42 @@ document.getElementById('dtop').textContent = new Date().toLocaleDateString('pt-
 
 const WIAPY_URL = 'https://pay.wiapy.com/kjlpt51ywe';
 
-function irParaWiapy(inputId) {
-  const input = document.getElementById(inputId);
-  const email = input ? input.value.trim() : '';
-  if (!email || !email.includes('@')) {
-    if (input) { input.focus(); input.style.borderColor = 'rgba(232,20,60,.6)'; }
+function abrirModal(){
+  const m = document.getElementById('emailModal');
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('email-modal').focus(), 100);
+}
+
+function fecharModal(){
+  document.getElementById('emailModal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('modalErr').classList.remove('show');
+}
+
+function confirmarEmail(){
+  const input = document.getElementById('email-modal');
+  const err = document.getElementById('modalErr');
+  const email = input.value.trim();
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!ok) {
+    err.classList.add('show');
+    input.style.borderColor = 'rgba(232,20,60,.6)';
+    input.focus();
     return;
   }
   document.cookie = 'comprador_email=' + encodeURIComponent(email) + '; path=/; max-age=3600; SameSite=Lax';
   window.location.href = WIAPY_URL + '?email=' + encodeURIComponent(email);
 }
 
-// Enter nos campos de email
+// Enter no campo do modal + ESC pra fechar
 document.addEventListener('DOMContentLoaded', function() {
-  ['email-hero','email-oferta'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') irParaWiapy(id);
-    });
+  const el = document.getElementById('email-modal');
+  if (el) el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') confirmarEmail();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') fecharModal();
   });
 });
 </script>
