@@ -63,10 +63,13 @@ body{background:var(--bg);color:var(--white);font-family:'Barlow',sans-serif;min
   <div class="section-title">Seus materiais</div>
   <p class="section-sub">Clique em cada item para acessar o Google Drive</p>
 
-  <div id="loading" style="text-align:center;padding:36px 0;color:rgba(255,255,255,.5);font-size:14px">⏳ Confirmando seu pagamento e liberando seus materiais...</div>
+  <div id="loading" style="text-align:center;padding:36px 0;color:rgba(255,255,255,.65);font-size:15px;line-height:1.7">
+    ✅ Pagamento aprovado!<br>
+    <span style="color:rgba(255,255,255,.45);font-size:13px">Preparando seus materiais, só um segundo...</span>
+  </div>
 
   <div id="email-prompt" style="display:none;background:var(--bg2);border:1px solid rgba(245,197,24,.2);border-radius:16px;padding:24px;margin-bottom:24px">
-    <p style="font-size:15px;margin-bottom:14px;color:rgba(255,255,255,.82);line-height:1.5">Confirme o <strong>e-mail que você usou na compra</strong> para liberar seus materiais:</p>
+    <p style="font-size:15px;margin-bottom:14px;color:rgba(255,255,255,.82);line-height:1.5">⚽ Seus materiais estão prontos!<br><span style="font-size:13px;color:rgba(255,255,255,.5)">Digite o e-mail que você usou no pagamento para liberar o acesso:</span></p>
     <input id="email-input" type="email" inputmode="email" autocomplete="email" placeholder="E-mail da compra" style="width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px;font-size:16px;color:#fff;font-family:'Barlow',sans-serif;outline:none;margin-bottom:10px;-webkit-appearance:none">
     <p id="email-error" style="display:none;color:#ff6b81;font-size:13px;margin-bottom:10px">Não encontramos um pedido com esse e-mail. Confira se é o mesmo que você usou no pagamento.</p>
     <button id="email-btn" onclick="buscarPorInput()" style="width:100%;background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;font-weight:800;font-size:16px;padding:15px;border-radius:50px;border:none;cursor:pointer;font-family:'Barlow',sans-serif">Ver meus materiais</button>
@@ -191,7 +194,7 @@ async function init() {
   // Caminho automatico: email vindo da URL (se o Wiapy passar no redirect) ou do cookie do site.
   const email = (params.get('email') || getCookieEmail() || '').trim();
   if (email) {
-    const d = await buscarComPolling(email, 20); // ate ~60s, pagamento recem-feito
+    const d = await buscarComPolling(email, 3); // ~9s
     if (d) { document.cookie = 'comprador_email=; path=/; max-age=0'; render(d.itens, d.nome || nomeParam); return; }
   }
   // Nao achou (sem email, email divergente do checkout, ou acesso por outro dispositivo): pede o email da compra.
