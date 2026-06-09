@@ -191,13 +191,10 @@ async function buscarPorInput() {
 }
 
 async function init() {
-  // Caminho automatico: email vindo da URL (se o Wiapy passar no redirect) ou do cookie do site.
   const email = (params.get('email') || getCookieEmail() || '').trim();
-  if (email) {
-    const d = await buscarComPolling(email, 3); // ~9s
-    if (d) { document.cookie = 'comprador_email=; path=/; max-age=0'; render(d.itens, d.nome || nomeParam); return; }
-  }
-  // Nao achou (sem email, email divergente do checkout, ou acesso por outro dispositivo): pede o email da compra.
+  if (!email) { mostrarPrompt(); return; }
+  const d = await buscarComPolling(email, 3); // ~9s, so se tiver email
+  if (d) { document.cookie = 'comprador_email=; path=/; max-age=0'; render(d.itens, d.nome || nomeParam); return; }
   mostrarPrompt();
 }
 
