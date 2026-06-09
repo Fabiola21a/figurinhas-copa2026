@@ -58,23 +58,13 @@ export default async function handler(req, res) {
     cartela:   'https://drive.google.com/drive/folders/1MAd00A-mElCaN_Wj35C41HL5a0YyS6T7?usp=drive_link',
   };
 
-  // products[] = produtos efetivamente COMPRADOS (a doc do Wiapy confirma que inclui orderbumps adquiridos).
-  // checkout.orderbump[] = order bumps OFERECIDOS na tela, comprados ou nao -> NAO usar pra liberar acesso.
-  const comprados = Array.isArray(products) ? products : [];
-  console.log('COMPRADOS:', comprados.map(p => `${p.title} [${p.id}]`).join(' | ') || '(products vazio)');
-
-  // Mapa por ID do Wiapy (a prova de falha). Preencher com os ids reais de products[].id:
-  const MAPA_ID = {
-    // 'id-do-produto-principal': 'principal',
-    // 'id-do-orderbump-neymar': 'neymar',
-    // 'id-do-orderbump-gold':   'gold',
-    // 'id-da-cartela':          'cartela',
-  };
-
   const itensSet = new Set(['principal']);
-  for (const p of comprados) {
-    const porId = MAPA_ID[p.id];
-    const k = porId || detectar(p.title); // ID primeiro; titulo so como fallback
+  for (const ob of (checkout.orderbump || [])) {
+    const k = detectar(ob.title);
+    if (k) itensSet.add(k);
+  }
+  for (const p of products) {
+    const k = detectar(p.title);
     if (k) itensSet.add(k);
   }
   const itens = [...itensSet];
