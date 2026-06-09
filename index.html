@@ -372,7 +372,8 @@ function confirmarEmail(){
     return;
   }
   document.cookie = 'comprador_email=' + encodeURIComponent(email) + '; path=/; max-age=3600; SameSite=Lax';
-  window.location.href = WIAPY_URL + '?email=' + encodeURIComponent(email);
+  const emailParam = encodeURIComponent(email).replace(/%40/g, '@');
+  window.location.href = WIAPY_URL + '?email=' + emailParam;
 }
 
 // Enter no campo do modal + ESC pra fechar
